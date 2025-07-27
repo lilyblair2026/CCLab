@@ -2,13 +2,13 @@ let g; // graphics/buffer
 
 let state = "seed"; //controls seed progression
 let growRate = 0; // tracks how much the flower has grown (0 = seed, 1 = grown)
-let flowerCenterX; // x coordinate of the flower's center
-let flowerCenterY; // y coordinate of the flower's center
+let flowerCenterX;
+let flowerCenterY;
 let trainX = -200; // horizontal position of the subway
 
 //butterfly arrays
-let butterflyX = []; //x position
-let butterflyY = []; // y position
+let butterflyX = [];
+let butterflyY = [];
 let butterflyAngle = []; //direction of movement
 let butterflySpeed = []; //speed of each butterfly
 let butterflyZ = []; //offset for butterfly movement 
@@ -18,11 +18,11 @@ function setup() {
     let canvas = createCanvas(800, 500);
     canvas.parent("p5-canvas-container"); // attach canvas to HTML element
 
-    g = createGraphics(width, height); //create background layer for static elements
+    g = createGraphics(width, height);
 
     //set flower's position in the center/bottom of canvas
-    flowerCenterX = width / 2; // horizontal
-    flowerCenterY = height / 2 + 70; // vertical
+    flowerCenterX = width / 2;
+    flowerCenterY = height / 2 + 70;
 
     //draws stars on the buffer/does not generate every frame
     for (let i = 0; i < 100; i = i + 0.5) {
@@ -41,12 +41,12 @@ function draw() {
         background(10, 12, 36); //night blue background
         image(g, 0, 0);
     } else {
-        // fade away for qoute
+        // fade away for quote
         background(200, 255, 255, 5);
     }
 
     if (state == "flowerdies") {
-        //displays qoute when flower dies
+        //displays quote when flower dies
         fill(255); //
         noStroke();
         textAlign(CENTER, CENTER);
@@ -59,7 +59,7 @@ function draw() {
             height / 2
         );
 
-        //second line of qoute
+        //second line of quote
         textSize(28);
         textFont("Satisfy");
         textStyle(ITALIC);
@@ -143,7 +143,7 @@ function draw() {
             deadFrame = frameCount; //store time of death
         }
         //  after butterflies, display qoute
-        if (frameCount - deadFrame > 100) {
+        if (frameCount - deadFrame > 380) {
             state = "flowerdies";
         }
     }
@@ -160,7 +160,7 @@ function drawSubwayBackground() {
 function drawSubwayTrain() {
     trainX = trainX + 2.2; //move train to the right
     if (trainX > width + 200) {
-        trainX = -200; // loops train to left when off screen
+        trainX = -200;
     }
 
     let trainBoxes = 4; //number of train boxes
@@ -215,7 +215,7 @@ function drawPlant(x, y, growAmount, grayOut) {
         stroke(70, 170, 100); // green if alive
     }
     strokeWeight(10);
-    let stemLength = 150 * growAmount; //stem with growAmount
+    let stemLength = 150 * growAmount;
     line(x, y, x, y + stemLength);
     noStroke();
 
@@ -257,7 +257,10 @@ function drawMiniHydrangea(x, y, size, grayOut) {
     if (grayOut == true) {
         fill(150, 150, 150);
     } else {
-        fill(214, 195, 255); //petal colors
+        let r = random(180, 255);
+        let g = random(160, 220);
+        let b = random(240, 255);
+        fill(r, g, b);
     }
     ellipse(x, y - 9, 20, 15);
     ellipse(x + 9, y, 20, 15);
@@ -281,7 +284,7 @@ function makeButterflies(x, y) {
     for (let i = 0; i < total; i = i + 1) {
         let angle = map(i, 0, total, 0, TWO_PI); // distributed around the flower
         let speed = random(2, 5); //randomized speed
-        butterflyX.push(x); //start from flower center
+        butterflyX.push(x);
         butterflyY.push(y);
         butterflyAngle.push(angle);
         butterflySpeed.push(speed + random(-0.5, 0.5));
