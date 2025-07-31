@@ -38,16 +38,31 @@ body {
 }
 
 .red {
-    color: DeepPink;
+    color: rgb(128, 5, 5);
 }
 
 .green {
-    color: LightSeaGreen;
+    color: rgb(2, 85, 11);
 }
 
 .yellow {
     color: GoldenRod;
 }
+
+purple{
+    color:rgb(90, 13, 162);
+}
+
+brown {
+    color: SaddleBrown;
+}   
+blue{
+    color: rgba(11, 11, 134, 0.917); 
+}
+grey{
+    color: dimgrey;
+}   
+
 
 .two-columns {
     display: flex;
