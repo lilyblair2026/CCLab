@@ -49,19 +49,21 @@ body {
     color: GoldenRod;
 }
 
-purple{
-    color:rgb(90, 13, 162);
+.purple {
+    color: rgb(90, 13, 162);
 }
 
-brown {
+.brown {
     color: SaddleBrown;
-}   
-blue{
-    color: rgba(11, 11, 134, 0.917); 
 }
-grey{
+
+.blue {
+    color: rgba(11, 11, 134, 0.917);
+}
+
+.grey {
     color: dimgrey;
-}   
+}
 
 
 .two-columns {
