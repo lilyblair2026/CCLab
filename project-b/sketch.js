@@ -199,6 +199,15 @@ function draw() {
     image(currentVscoImage, width / 2, height / 2, 300, 300);
     return;
   }
+
+  //snapchat overlay
+  if (snapOpen) {
+    fill(0, 180);
+    rect(0, 0, width, height);
+    imageMode(CENTER);
+    iamge(snapPic, width / 2, height / 2, 360, 720);
+    return;
+  }
   // phone
   fill(0);
   rect(0, 0, width, height, 40);
@@ -330,6 +339,12 @@ function mousePressed() {
     return;
   }
 
+  //close snapchat
+  if (snapOpen) {
+    snapOpen = false;
+    return;
+  }
+
   //instagram
   for (let i = 0; i < notifMsg.length; i++) {
     if (
@@ -378,6 +393,11 @@ function mousePressed() {
       if (notifApp[i] == "VSCO") {
         currentVscoImage = random(vscoPics).pic;
         vscoOpen = true;
+        return;
+      }
+      //snapchat
+      if (notifApp[i] == "Snapchat") {
+        snapOpen = true;
         return;
       }
     }
