@@ -1,5 +1,3 @@
-
-
 //life360
 let life360Pic; //image
 let life360 = [];
@@ -16,6 +14,10 @@ let spotifyPlaylist = [];
 let vscoPics;
 let vscoOpen = false;
 let currentVscoImage = null;
+
+//snapchat
+let snapOpen = false;
+let snapPics = [];
 
 // notification sound
 let ding;
@@ -92,9 +94,11 @@ function preload() {
     { pic: loadImage("assets/vsco1.png") }
   ];
 
-
   //life360  notification
   life360Pic = loadImage("assets/speedlimit.png");
+
+  //snapchat notification
+  snapPic = loadImage("assets/snapchat.png");
 
   //spotify songs + album covers
   spotifyPlaylist = [
