@@ -11,6 +11,7 @@ body {
     font-family: 'Courier New', Courier, monospace;
     font-size: 1em;
     line-height: 1.5em;
+
 }
 
 /* title */
@@ -24,6 +25,11 @@ body {
     font-weight: 600;
     margin-top: 80px;
     margin-bottom: 60px;
+    margin-left: 0;
+    padding-left: 0;
+    text-indent: 0;
+
+
 }
 
 /* main content */
@@ -31,6 +37,18 @@ body {
     width: 800px;
     position: relative;
     margin: auto;
+
+}
+
+.one-column p {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    text-indent: 0;
+}
+
+.one-column p+p {
+    margin-top: 10px;
 }
 
 .black {
@@ -50,7 +68,7 @@ body {
 }
 
 .purple {
-    color: rgb(90, 13, 162);
+    color: rgb(170, 116, 221);
 }
 
 .brown {
@@ -61,16 +79,8 @@ body {
     color: rgba(11, 11, 134, 0.917);
 }
 
-.grey {
-    color: dimgrey;
-}
-
 .pink {
     color: rgb(255, 105, 180);
-}   
-
-.purple-bg {
-    color: rgb(171, 112, 225);
 }
 
 
