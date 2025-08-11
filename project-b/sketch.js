@@ -1,3 +1,7 @@
+//notification
+let choice = messages[0];
+
+
 //life360
 let life360Pic; //image
 let life360 = [];
@@ -17,7 +21,7 @@ let currentVscoImage = null;
 
 //snapchat
 let snapOpen = false;
-let snapPics = [];
+let snapPic = [];
 
 // notification sound
 let ding;
@@ -158,8 +162,6 @@ function preload() {
 function setup() {
   let canvas = createCanvas(400, 800);
   canvas.parent("p5-canvas-container");
-
-  availableMessages = messages.splice();
 }
 
 function draw() {
@@ -207,7 +209,7 @@ function draw() {
     fill(0, 180);
     rect(0, 0, width, height);
     imageMode(CENTER);
-    iamge(snapPic, width / 2, height / 2, 360, 720);
+    image(snapPic, width / 2, height / 2, 360, 720);
     return;
   }
   // phone
@@ -293,13 +295,12 @@ function draw() {
     notifBirth.push(millis());
 
 
-    nextY = nextY += 60;
-    lastSpawn = milis();
+    nextY += 60;
+    lastSpawn = millis();
 
     if (ding && ding.isLoaded()) {
       ding.play();
     }
-    lastSpawn = millis();
     if (nextY > 700) {
       nextY = 120;
     }
