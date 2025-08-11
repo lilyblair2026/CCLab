@@ -158,6 +158,8 @@ function preload() {
 function setup() {
   let canvas = createCanvas(400, 800);
   canvas.parent("p5-canvas-container");
+
+  availableMessages = messages.splice();
 }
 
 function draw() {
@@ -220,17 +222,13 @@ function draw() {
   for (let i = notifMsg.length - 1; i >= 0; i--) {
     let age = millis() - notifBirth[i];
     if (age > lifespan) {
-      notifX.splice(i, 1);
-      notifY.splice(i, 1);
-      notifMsg.splice(i, 1);
-      notifBirth.splice(i, 1);
-      notifIcon.splice(i, 1);
-      notifApp.splice(i, 1);
     } else {
+      //icon
       fill(255);
       rect(notifX[i], notifY[i], 250, 56, 14);
       imageMode(CORNER);
       image(notifIcon[i], notifX[i] + 10, notifY[i] + 12, 30, 30);
+      //app name
       fill(0);
       textAlign(LEFT, CENTER);
       textStyle(BOLD);
@@ -238,6 +236,7 @@ function draw() {
       text(notifApp[i], notifX[i] + 52, notifY[i] + 26);
       textStyle(NORMAL);
       textSize(12);
+      //message
       fill(30);
       text(notifMsg[i], notifX[i] + 52, notifY[i] + 44);
     }
@@ -275,9 +274,13 @@ function draw() {
     }
   }
 
-  // spawn notifications every 5 sec
-  if (millis() - lastSpawn > 5000) {
-    let choice = random(messages);
+  // spawn notifications every 2 sec
+  if (millis() - lastSpawn > 2000) {
+
+    //pick ranomd messages
+    let choicePosition = int(random(messages.length));
+    let choice = messages[choicePosition];
+
     let icon = apps[choice.icon];
     let body = choice.text;
     let appName = choice.app;
@@ -289,7 +292,10 @@ function draw() {
     notifIcon.push(icon);
     notifBirth.push(millis());
 
-    nextY = nextY + 60;
+
+    nextY = nextY += 60;
+    lastSpawn = milis();
+
     if (ding && ding.isLoaded()) {
       ding.play();
     }
@@ -297,6 +303,8 @@ function draw() {
     if (nextY > 700) {
       nextY = 120;
     }
+    //remove repeat
+    messages.splice(choicePosition, 1);
   }
 }
 
