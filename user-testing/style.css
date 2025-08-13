@@ -24,6 +24,7 @@ canvas {
   height: 100vh;
 
   text-align: center;
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -32,21 +33,7 @@ canvas {
 
 .main-container {
   /* background-color: antiquewhite; */
+
   width: 400px;
   margin: auto;
 }
-
-.landing-page-title-container {
-  background-image: url("assets/beach.jpg");
-  background-position: center center;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-.main-title {
-  font-size: 70px;
-  font-family: "Lucida Handwriting", "Brush Script M7", cursive;
-  color: #ffffff;
-}
-

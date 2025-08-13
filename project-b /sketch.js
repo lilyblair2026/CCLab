@@ -1,6 +1,13 @@
+// bettery
+let batteryCharge = 1.0;
+
+//wallpaper
+let screenCrack; //image
+
 //life360
-let life360Pic; //image
+let life360Pics; //image
 let life360Open = false;
+let currentLife360Image = null;
 
 //spotify
 let spotifyOpen = false;
@@ -16,6 +23,10 @@ let currentVscoImage = null;
 //snapchat
 let snapOpen = false;
 let snapPic;
+
+//facetime
+let facetimeOpen = false;
+let webcam;
 
 // notification sound
 let ding;
@@ -44,7 +55,7 @@ let currentChat = [];
 let nextMSG = 0;
 let lastTypeTime = 0;   //timer for reveal 
 
-// separate chats - add more variety after user testing
+// separate chats 
 let chatBestie = [
   { Sender: "Bestie", message: "hey, wyd tn" },
   { Sender: "You", message: "going to the area 51 raid wby" },
@@ -63,6 +74,16 @@ let chatMom = [
   { Sender: "You", message: "probably" },
   { Sender: "Mom", message: "you can find a part-time job" },
   { Sender: "You", message: "I should have asked dad" }
+];
+
+let chatBoyfriend = [
+  { Sender: "Boyfriend", message: "hey, wyd tmrw" },
+  { Sender: "You", message: "napping" },
+  { Sender: "Boyfriend", message: "let's go watch the new IT movie" },
+  { Sender: "Boyfriend", message: "I already got us tickets" },
+  { Sender: "You", message: "kk <3" },
+  { Sender: "Boyfriend", message: "be ready by 7pm" },
+  { Sender: "Boyfriend", message: "see u tmrw <3" },
 ];
 
 // notification data
@@ -85,15 +106,24 @@ let messages = [
 
 function preload() {
 
+  //lockscreen
+  lockScreen = loadImage("assets/screen.png");
+
+  //wallpaper
+  screenCrack = loadImage("assets/glass.png");
+
   // vsco notification
   vscoPics = [
     { pic: loadImage("assets/vsco1.png") },
-    { pic: loadImage("assets/vsco1.png") },
-    { pic: loadImage("assets/vsco1.png") }
+    { pic: loadImage("assets/vsco2.png") },
+    { pic: loadImage("assets/vsco3.png") }
   ];
 
   //life360  notification
-  life360Pic = loadImage("assets/speedlimit.png");
+  life360Pics = [
+    { life: loadImage("assets/speedlimit.png") },
+    { life: loadImage("assets/life1.png") }
+  ];
 
   //snapchat notification
   snapPic = loadImage("assets/snapchat.png");
@@ -110,7 +140,9 @@ function preload() {
     { song: loadSound("assets/electric.mp3"), album: loadImage("assets/electric.png") },
     { song: loadSound("assets/stars.mp3"), album: loadImage("assets/stars.png") },
     { song: loadSound("assets/backyardboy.mp3"), album: loadImage("assets/backyardboy.png") },
-    { song: loadSound("assets/payphone.mp3"), album: loadImage("assets/payphone.png") }
+    { song: loadSound("assets/payphone.mp3"), album: loadImage("assets/payphone.png") },
+    { song: loadSound("assets/goodtime.mp3"), album: loadImage("assets/owlcity.png") }
+
   ];
 
   // sound
@@ -155,16 +187,26 @@ function preload() {
 function setup() {
   let canvas = createCanvas(400, 800);
   canvas.parent("p5-canvas-container");
+
+  //facetime
+  webcam = createCapture(VIDEO);
+  webcam.hide();
+
 }
 
 function draw() {
   background(220);
-  noStroke();
+  image(lockScreen, 20, 20, 350, 760);
+
   // phone
+  noStroke();
   fill(0);
   rect(0, 0, width, height, 40);
   fill(255);
   rect(20, 20, 360, 760, 30);
+  //wallpaper
+  image(screenCrack, 20, 20, 360, 760);
+  // speaker
   fill(80);
   rect(width / 2 - 30, 30, 60, 10, 5);
 
@@ -240,7 +282,7 @@ function draw() {
     fill(0, 180);
     rect(0, 0, width, height);
     imageMode(CENTER);
-    image(life360Pic, width / 2, height / 2, 360, 720);
+    image(currentLife360Image, width / 2, height / 2, 360, 720);
     return;
   }
 
@@ -270,10 +312,17 @@ function draw() {
     image(snapPic, width / 2, height / 2, 360, 720);
     return;
   }
+  //facetime overlay 
+  if (facetimeOpen) {
+    fill(0, 180);
+    rect(0, 0, width, height);
+    image(webcam, 50, 250, 300, 200);
+  }
 
   // spawn notifications every 2 sec
   if (millis() - lastSpawn > 2000) {
     //pick ranomd messages
+    //let choice = messages[11]; //***
     let choice = random(messages);
     let icon = apps[choice.icon];
     let body = choice.text;
@@ -296,12 +345,12 @@ function draw() {
       nextY = 120;
     }
   }
-  
+
   // battery variables
   let batteryX = width - 80;
   let batteryY = 30;
   let batteryWidth = 40;
-  let batteryHeight = 20;
+  let batteryHeight = 15;
 
   // Draw battery body
   stroke(0);
@@ -309,9 +358,58 @@ function draw() {
   rect(batteryX, batteryY, batteryWidth, batteryHeight, 5);
 
   // battery level
-  fill(0, 200, 0); // green
-  let charge = 0.4; // 40% charged
-  rect(batteryX, batteryY, batteryWidth * charge, batteryHeight, 5);
+  batteryCharge -= 0.0003;
+
+  // glitch
+  if (batteryCharge > 0.3) {
+    push();
+    for (let i = 0; i < 2; i++) {
+      let x = floor(random(width));
+      let y = floor(random(height));
+
+      let clr = get(x, y);
+      let r = red(clr) + random(-30, 30);
+      let g = green(clr) + random(-30, 30);
+      let b = blue(clr) + random(-30, 30);
+
+      fill(clr);
+      noStroke();
+      rect(x, y, random(5, 30), random(5, 30));
+    }
+    pop();
+  } else {
+    push();
+    for (let i = 0; i < 10; i++) {
+      let x = floor(random(width));
+      let y = floor(random(height));
+
+      let clr = get(x, y);
+      let r = red(clr) + random(-30, 30);
+      let g = green(clr) + random(-30, 30);
+      let b = blue(clr) + random(-30, 30);
+
+      fill(clr);
+      noStroke();
+      rect(x, y, random(5, 30), random(5, 30));
+    }
+    pop();
+  }
+
+  // battery level indicator
+  if (batteryCharge > 0.5) {
+    fill(0, 200, 0); // green
+  } else if (batteryCharge > 0) {
+    fill(200, 0, 0); // red
+  } else {
+    //shutdown = true;
+  }
+  rect(batteryX, batteryY, batteryWidth * batteryCharge, batteryHeight, 5);
+
+  // shutdown
+  if (batteryCharge <= 0) {
+    batteryCharge = 0;
+    // drow something here
+  }
 }
 
 function mousePressed() {
@@ -358,6 +456,12 @@ function mousePressed() {
     return;
   }
 
+  //facetime
+  if (facetimeOpen) {
+    facetimeOpen = false;
+    return;
+  }
+
   //instagram 
   for (let i = notifMsg.length - 1; i >= 0; i--) {
     if (millis() - notifBirth[i] > lifespan) continue; // ignore expired
@@ -372,14 +476,16 @@ function mousePressed() {
         mode = "memes";
         return;
       }
-      //messages
+      //imessages
       if (notifApp[i] == "iMessage") {
         chatOpen = true;
-        let pickChat = random(2);
+        let pickChat = random(3);
         if (pickChat < 1) {
           currentChat = chatBestie;
-        } else {
+        } else if (pickChat < 2) {
           currentChat = chatMom;
+        } else {
+          currentChat = chatBoyfriend;
         }
 
         nextMSG = 0;
@@ -388,6 +494,8 @@ function mousePressed() {
       }
       //life360
       if (notifApp[i] == "Life360") {
+        currentLife360Image = random(life360Pics).life;
+        console.log(currentLife360Image);
         life360Open = true;
         return;
       }
@@ -404,8 +512,13 @@ function mousePressed() {
       //vsco
       if (notifApp[i] == "VSCO") {
         currentVscoImage = random(vscoPics).pic;
+        console.log(currentVscoImage);
         vscoOpen = true;
         return;
+      }
+      //facetime
+      if (notifApp[i] == "Facetime") {
+        facetimeOpen = true;
       }
       //snapchat
       if (notifApp[i] == "Snapchat") {
