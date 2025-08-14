@@ -1,5 +1,8 @@
 // bettery
-let batteryCharge = 1.0;
+let batteryCharge = 0.8; //80%
+let fadeAmount = 0;
+let shutDown = false;
+
 
 //wallpaper
 let screenCrack; //image
@@ -106,11 +109,9 @@ let messages = [
 
 function preload() {
 
-  //lockscreen
-  lockScreen = loadImage("assets/screen.png");
 
   //wallpaper
-  screenCrack = loadImage("assets/glass.png");
+  screenCrack = loadImage("assets/screencrack.png");
 
   // vsco notification
   vscoPics = [
@@ -196,7 +197,6 @@ function setup() {
 
 function draw() {
   background(220);
-  image(lockScreen, 20, 20, 350, 760);
 
   // phone
   noStroke();
@@ -210,7 +210,52 @@ function draw() {
   fill(80);
   rect(width / 2 - 30, 30, 60, 10, 5);
 
+  // battery variables
+  let batteryX = width - 80;
+  let batteryY = 30;
+  let batteryWidth = 40;
+  let batteryHeight = 15;
 
+  // draw battery body
+  stroke(0);
+  fill(255);
+  rect(batteryX, batteryY, batteryWidth, batteryHeight, 5);
+  noStroke();
+
+  // battery level
+  batteryCharge -= 0.0005; //speed
+  if (batteryCharge < 0)
+    batteryCharge = 0;
+
+  // level from green to red
+  if (batteryCharge > 0.3) { //how much green 
+    fill(0, 200, 0); // green
+  } else if (batteryCharge > 0) {
+    fill(200, 0, 0); // red
+  } else {
+    fill(0);
+  }
+  rect(batteryX, batteryY, batteryWidth * batteryCharge, batteryHeight, 5);
+
+  //glitch only when battery is red 
+  // if (!shutDown && batteryCharge > 0 && batteryCharge <= 0.3) {
+  // push();
+  // for (let i = 0; i < 50; i++) { //# of glitches 
+  // let x = floor(random(width));
+  //  let y = floor(random(height));
+  // let clr = get(x, y);
+  //  let r = red(clr) + random(-30, 30);
+  //  let g = green(clr) + random(-30, 30);
+  //  let b = blue(clr) + random(-30, 30);
+  //  fill(r, g, b);
+  //  rect(x, y, w, h); //thin glitches 
+  //  }
+  // pop();
+  // }
+
+  if (!shutDown && batteryCharge <= 0) {
+    shutDown = true;
+  }
   // notifications
   for (let i = notifMsg.length - 1; i >= 0; i--) {
     let age = millis() - notifBirth[i];
@@ -345,72 +390,19 @@ function draw() {
       nextY = 120;
     }
   }
-
-  // battery variables
-  let batteryX = width - 80;
-  let batteryY = 30;
-  let batteryWidth = 40;
-  let batteryHeight = 15;
-
-  // Draw battery body
-  stroke(0);
-  fill(255);
-  rect(batteryX, batteryY, batteryWidth, batteryHeight, 5);
-
-  // battery level
-  batteryCharge -= 0.0003;
-
-  // glitch
-  if (batteryCharge > 0.3) {
-    push();
-    for (let i = 0; i < 2; i++) {
-      let x = floor(random(width));
-      let y = floor(random(height));
-
-      let clr = get(x, y);
-      let r = red(clr) + random(-30, 30);
-      let g = green(clr) + random(-30, 30);
-      let b = blue(clr) + random(-30, 30);
-
-      fill(clr);
-      noStroke();
-      rect(x, y, random(5, 30), random(5, 30));
-    }
-    pop();
-  } else {
-    push();
-    for (let i = 0; i < 10; i++) {
-      let x = floor(random(width));
-      let y = floor(random(height));
-
-      let clr = get(x, y);
-      let r = red(clr) + random(-30, 30);
-      let g = green(clr) + random(-30, 30);
-      let b = blue(clr) + random(-30, 30);
-
-      fill(clr);
-      noStroke();
-      rect(x, y, random(5, 30), random(5, 30));
-    }
-    pop();
-  }
-
-  // battery level indicator
-  if (batteryCharge > 0.5) {
-    fill(0, 200, 0); // green
-  } else if (batteryCharge > 0) {
-    fill(200, 0, 0); // red
-  } else {
-    //shutdown = true;
-  }
-  rect(batteryX, batteryY, batteryWidth * batteryCharge, batteryHeight, 5);
-
-  // shutdown
+  //fade to black/shutdown 
   if (batteryCharge <= 0) {
-    batteryCharge = 0;
-    // drow something here
+    if (fadeAmount < 255) {
+      fadeAmount += 2; //speed of fade 
+    }
+    fill(0, fadeAmount);
+    rect(0, 0, width, height);
+    if (fadeAmount >= 255) {
+      noLoop(); //shutdown 
+    }
   }
 }
+
 
 function mousePressed() {
   if (getAudioContext().state !== "running") {
