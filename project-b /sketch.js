@@ -237,22 +237,6 @@ function draw() {
   }
   rect(batteryX, batteryY, batteryWidth * batteryCharge, batteryHeight, 5);
 
-  //glitch only when battery is red 
-  // if (!shutDown && batteryCharge > 0 && batteryCharge <= 0.3) {
-  // push();
-  // for (let i = 0; i < 50; i++) { //# of glitches 
-  // let x = floor(random(width));
-  //  let y = floor(random(height));
-  // let clr = get(x, y);
-  //  let r = red(clr) + random(-30, 30);
-  //  let g = green(clr) + random(-30, 30);
-  //  let b = blue(clr) + random(-30, 30);
-  //  fill(r, g, b);
-  //  rect(x, y, w, h); //thin glitches 
-  //  }
-  // pop();
-  // }
-
   if (!shutDown && batteryCharge <= 0) {
     shutDown = true;
   }
